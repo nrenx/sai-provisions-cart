@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors for Vijaya Sai Provisions
+				"brand": {
+					"primary": "#9b87f5",
+					"secondary": "#7E69AB",
+					"dark": "#1A1F2C",
+					"accent": "#8B5CF6",
+					"orange": "#F97316",
+					"light": "#F1F1F1",
+					"soft-purple": "#E5DEFF",
+					"soft-pink": "#FFDEE2"
 				}
 			},
 			borderRadius: {
