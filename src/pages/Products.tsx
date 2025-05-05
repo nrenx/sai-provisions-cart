@@ -145,11 +145,14 @@ const Products: React.FC = () => {
                 id: product.id,
                 name: product.name,
                 price: product.price,
-                image: product.image_url ? 
+                image_url: product.image_url ? 
                   `${supabase.storageUrl}/object/public/product_images/${product.image_url}` : 
                   '/placeholder.svg',
-                category: (product.category?.name as any) || 'Uncategorized',
                 description: product.description || undefined,
+                category_id: product.category_id,
+                stock_level: product.stock_level,
+                created_at: product.created_at,
+                updated_at: product.updated_at
               }} 
             />
           ))}

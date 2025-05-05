@@ -16,7 +16,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
     <div className="flex items-center py-4 border-b last:border-b-0">
       <div className="w-20 h-20 bg-gray-200 rounded overflow-hidden flex-shrink-0">
         <img 
-          src={product.image} 
+          src={product.image_url || '/placeholder.svg'} 
           alt={product.name} 
           className="w-full h-full object-cover"
         />
@@ -24,7 +24,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
       
       <div className="flex-grow ml-4">
         <h3 className="font-medium text-brand-dark">{product.name}</h3>
-        <p className="text-gray-500 text-sm">{product.category}</p>
+        <p className="text-gray-500 text-sm">Category: {product.category_id}</p>
       </div>
       
       <div className="flex-shrink-0 flex items-center ml-4">
