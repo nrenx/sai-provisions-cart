@@ -221,7 +221,7 @@ const CategoriesManagement: React.FC = () => {
                   <TableCell>
                     {category.image_url ? (
                       <img 
-                        src={`${supabase.storageUrl}/object/public/product_images/${category.image_url}`}
+                        src={supabase.storage.from('product_images').getPublicUrl(category.image_url).data.publicUrl}
                         alt={category.name} 
                         className="w-10 h-10 rounded object-cover"
                       />

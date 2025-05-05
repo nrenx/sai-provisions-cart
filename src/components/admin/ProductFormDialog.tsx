@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -142,10 +143,17 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
         if (error) throw error;
         return { ...productData, id: product.id };
       } else {
-        // Add new product
+        // Add new product - Fix for the typing issue is here
         const { data, error } = await supabase
           .from('products')
-          .insert([productData])
+          .insert({  // Changed from insert([{...}]) to insert({...})
+            name: values.name,
+            price: values.price,
+            description: values.description,
+            category_id: values.category_id,
+            stock_level: values.stock_level,
+            image_url: imagePath,
+          })
           .select()
           .single();
           
