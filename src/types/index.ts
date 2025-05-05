@@ -31,3 +31,30 @@ export interface AdminProductFilter {
   stockLevel?: 'all' | 'low' | 'out';
   sortBy?: 'newest' | 'oldest' | 'name_asc' | 'name_desc' | 'price_asc' | 'price_desc';
 }
+
+// Coupon types
+export interface Coupon {
+  id: string;
+  code: string;
+  discount_amount: number;
+  is_percentage: boolean;
+  start_date: string;
+  expiry_date: string;
+  usage_limit: number | null;
+  usage_count: number;
+  active: boolean;
+  success_message?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CouponFormValues {
+  code: string;
+  discount_amount: number;
+  is_percentage: boolean;
+  start_date: Date;
+  expiry_date: Date;
+  usage_limit?: number | null;
+  success_message?: string;
+  active: boolean;
+}

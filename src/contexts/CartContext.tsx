@@ -12,7 +12,11 @@ interface CartContextProps {
   getCartTotal: () => number;
   customerInfo: CustomerInfo | null;
   setCustomerInfo: (info: CustomerInfo) => void;
-  generateWhatsAppLink: () => string;
+  generateWhatsAppLink: (appliedCoupon?: {
+    code: string;
+    discountAmount: number;
+    isPercentage: boolean;
+  } | null) => string;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -106,7 +110,25 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   };
 
-  const generateWhatsAppLink = () => {
+  const calculateDiscountAmount = (subtotal: number, appliedCoupon?: {
+    code: string;
+    discountAmount: number;
+    isPercentage: boolean;
+  } | null): number => {
+    if (!appliedCoupon) return 0;
+    
+    if (appliedCoupon.isPercentage) {
+      return (subtotal * appliedCoupon.discountAmount) / 100;
+    } else {
+      return Math.min(appliedCoupon.discountAmount, subtotal);
+    }
+  };
+
+  const generateWhatsAppLink = (appliedCoupon?: {
+    code: string;
+    discountAmount: number;
+    isPercentage: boolean;
+  } | null) => {
     if (cartItems.length === 0) return "";
     
     const phoneNumber = "919951690420";
@@ -126,7 +148,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       message += `${index + 1}. ${item.product.name} - ₹${item.product.price} x ${item.quantity} = ₹${item.product.price * item.quantity}\n`;
     });
     
-    message += `\n*Total Amount: ₹${getCartTotal()}*\n\n`;
+    const subtotal = getCartTotal();
+    message += `\n*Subtotal: ₹${subtotal.toFixed(2)}*\n`;
+    
+    // Add coupon info if applicable
+    if (appliedCoupon) {
+      const discountAmount = calculateDiscountAmount(subtotal, appliedCoupon);
+      message += `*Coupon Applied:* ${appliedCoupon.code}\n`;
+      message += `*Discount:* -₹${discountAmount.toFixed(2)}\n`;
+      message += `*Final Total:* ₹${(subtotal - discountAmount).toFixed(2)}\n\n`;
+    } else {
+      message += `\n*Total Amount: ₹${subtotal.toFixed(2)}*\n\n`;
+    }
+    
     message += "Thank you for your order!";
     
     return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

@@ -5,6 +5,7 @@ import CartItem from '../components/CartItem';
 import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CustomerInfo } from '../types';
+import CouponForm from '@/components/CouponForm';
 
 const Cart: React.FC = () => {
   const { cartItems, getCartTotal, customerInfo, setCustomerInfo, generateWhatsAppLink } = useCart();
@@ -14,11 +15,16 @@ const Cart: React.FC = () => {
     phone: customerInfo?.phone || '',
     address: customerInfo?.address || '',
   });
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    discountAmount: number;
+    isPercentage: boolean;
+  } | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setCustomerInfo(formData);
-    const whatsappLink = generateWhatsAppLink();
+    const whatsappLink = generateWhatsAppLink(appliedCoupon);
     if (whatsappLink) {
       window.open(whatsappLink, '_blank');
     }
@@ -27,6 +33,38 @@ const Cart: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleApplyCoupon = (discountAmount: number, isPercentage: boolean, code: string) => {
+    setAppliedCoupon({
+      code,
+      discountAmount,
+      isPercentage,
+    });
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+  };
+
+  // Calculate the discount amount
+  const calculateDiscountAmount = (): number => {
+    if (!appliedCoupon) return 0;
+    
+    const subtotal = getCartTotal();
+    
+    if (appliedCoupon.isPercentage) {
+      return (subtotal * appliedCoupon.discountAmount) / 100;
+    } else {
+      return Math.min(appliedCoupon.discountAmount, subtotal);
+    }
+  };
+
+  // Calculate final total after discount
+  const calculateFinalTotal = (): number => {
+    const subtotal = getCartTotal();
+    const discountAmount = calculateDiscountAmount();
+    return subtotal - discountAmount;
   };
 
   if (cartItems.length === 0) {
@@ -59,18 +97,33 @@ const Cart: React.FC = () => {
           <div className="bg-gradient-to-br from-brand-soft-purple to-white rounded-lg shadow-md p-6 sticky top-24">
             <h2 className="text-xl font-bold mb-4 text-brand-dark">Order Summary</h2>
             
+            {/* Coupon Section */}
+            <CouponForm 
+              onApplyCoupon={handleApplyCoupon} 
+              onRemoveCoupon={handleRemoveCoupon} 
+              appliedCoupon={appliedCoupon}
+            />
+            
             <div className="space-y-3 mb-6">
               <div className="flex justify-between">
                 <span className="text-gray-600">Items ({cartItems.length}):</span>
-                <span>₹{getCartTotal()}</span>
+                <span>₹{getCartTotal().toFixed(2)}</span>
               </div>
+              
+              {appliedCoupon && (
+                <div className="flex justify-between text-green-600">
+                  <span>Discount ({appliedCoupon.code}):</span>
+                  <span>-₹{calculateDiscountAmount().toFixed(2)}</span>
+                </div>
+              )}
+              
               <div className="flex justify-between">
                 <span className="text-gray-600">Delivery:</span>
                 <span className="text-green-600">Free</span>
               </div>
               <div className="border-t pt-3 flex justify-between font-bold">
                 <span>Total:</span>
-                <span className="text-xl text-brand-primary">₹{getCartTotal()}</span>
+                <span className="text-xl text-brand-primary">₹{calculateFinalTotal().toFixed(2)}</span>
               </div>
             </div>
             

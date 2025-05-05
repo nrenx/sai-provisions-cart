@@ -1,8 +1,9 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductsManagement from '@/components/admin/ProductsManagement';
 import CategoriesManagement from '@/components/admin/CategoriesManagement';
+import CouponsManagement from '@/components/admin/CouponsManagement';
 
 const Admin: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const Admin: React.FC = () => {
         <TabsList className="mb-6">
           <TabsTrigger value="products">Products</TabsTrigger>
           <TabsTrigger value="categories">Categories</TabsTrigger>
+          <TabsTrigger value="coupons">Coupons</TabsTrigger>
         </TabsList>
         
         <TabsContent value="products">
@@ -21,6 +23,10 @@ const Admin: React.FC = () => {
         
         <TabsContent value="categories">
           <CategoriesManagement />
+        </TabsContent>
+
+        <TabsContent value="coupons">
+          <CouponsManagement />
         </TabsContent>
       </Tabs>
     </div>

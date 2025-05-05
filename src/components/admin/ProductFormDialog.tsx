@@ -60,13 +60,13 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
       name: product.name,
       price: product.price,
       description: product.description || "",
-      category_id: product.category_id || "",
+      category_id: product.category_id || "uncategorized",
       stock_level: product.stock_level || 0,
     } : {
       name: "",
       price: 0,
       description: "",
-      category_id: "",
+      category_id: "uncategorized",
       stock_level: 0,
     }
   });
@@ -74,7 +74,10 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
   // Set image preview for existing product
   useEffect(() => {
     if (product?.image_url) {
-      setImagePreview(supabase.storage.from('product_images').getPublicUrl(product.image_url).data.publicUrl);
+      const publicUrl = supabase.storage.from('product_images').getPublicUrl(product.image_url).data.publicUrl;
+      setImagePreview(publicUrl);
+    } else {
+      setImagePreview(null);
     }
   }, [product]);
 
@@ -126,7 +129,11 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
       }
       
       const productData = {
-        ...values,
+        name: values.name,
+        price: values.price,
+        description: values.description,
+        category_id: values.category_id === "uncategorized" ? null : values.category_id,
+        stock_level: values.stock_level,
         image_url: imagePath,
       };
       
@@ -143,17 +150,10 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
         if (error) throw error;
         return { ...productData, id: product.id };
       } else {
-        // Add new product - Fix for the typing issue is here
+        // Add new product
         const { data, error } = await supabase
           .from('products')
-          .insert({  // Changed from insert([{...}]) to insert({...})
-            name: values.name,
-            price: values.price,
-            description: values.description,
-            category_id: values.category_id,
-            stock_level: values.stock_level,
-            image_url: imagePath,
-          })
+          .insert(productData)
           .select()
           .single();
           
@@ -197,7 +197,8 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
     } else {
       // If removing the new file but product has existing image
       if (product?.image_url) {
-        setImagePreview(supabase.storage.from('product_images').getPublicUrl(product.image_url).data.publicUrl);
+        const publicUrl = supabase.storage.from('product_images').getPublicUrl(product.image_url).data.publicUrl;
+        setImagePreview(publicUrl);
       } else {
         setImagePreview(null);
       }
