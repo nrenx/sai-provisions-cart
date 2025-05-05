@@ -6,12 +6,10 @@ import type { Database } from './types';
 const SUPABASE_URL = "https://dblcekrtlwawhoirovzt.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGNla3J0bHdhd2hvaXJvdnp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0NDQ2OTUsImV4cCI6MjA2MjAyMDY5NX0.BYcYNV4_wlRkB5QqJoSr6rcbevA12tmqCUU09df2ICg";
 
-// Import the supabase client like this:
-// import { supabase } from "@/integrations/supabase/client";
-
+// Create the Supabase client with the correct types
 const supabaseClient = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-// Add a utility property to access the storage URL easily
+// Export the client with the storageUrl property for convenience
 export const supabase = {
   ...supabaseClient,
   storageUrl: `${SUPABASE_URL}/storage/v1`,
