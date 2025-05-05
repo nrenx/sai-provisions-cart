@@ -93,10 +93,10 @@ const CategoriesManagement: React.FC = () => {
       
       const { data, error } = await supabase
         .from('categories')
-        .insert([{
+        .insert({
           name: values.name,
           image_url: imagePath
-        }])
+        })
         .select()
         .single();
         

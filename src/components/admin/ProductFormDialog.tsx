@@ -287,7 +287,7 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
                 <FormItem>
                   <FormLabel>Category</FormLabel>
                   <Select 
-                    value={field.value || ""} 
+                    value={field.value || "uncategorized"}
                     onValueChange={field.onChange}
                   >
                     <FormControl>
@@ -296,7 +296,7 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">Uncategorized</SelectItem>
+                      <SelectItem value="uncategorized">Uncategorized</SelectItem>
                       {categories?.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.name}

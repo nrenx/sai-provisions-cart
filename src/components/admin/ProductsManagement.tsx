@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -193,14 +194,14 @@ const ProductsManagement: React.FC = () => {
         
         <div className="flex flex-wrap gap-2">
           <Select 
-            value={filters.category || ''}
-            onValueChange={(value) => setFilters({...filters, category: value === '' ? null : value})}
+            value={filters.category || "null"}
+            onValueChange={(value) => setFilters({...filters, category: value === "null" ? null : value})}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="null">All Categories</SelectItem>
               {categories?.map((category) => (
                 <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
               ))}
