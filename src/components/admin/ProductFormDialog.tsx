@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,7 +20,7 @@ import {
   Select, SelectContent, SelectItem,
   SelectTrigger, SelectValue
 } from '@/components/ui/select';
-import { Loader2, Upload, X } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { ProductWithCategory } from '@/types/supabase';
 import ImageUpload from './ImageUpload';
 
@@ -74,7 +73,7 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
   // Set image preview for existing product
   useEffect(() => {
     if (product?.image_url) {
-      setImagePreview(`${supabase.storageUrl}/object/public/product_images/${product.image_url}`);
+      setImagePreview(supabase.storage.from('product_images').getPublicUrl(product.image_url).data.publicUrl);
     }
   }, [product]);
 
@@ -190,7 +189,7 @@ const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
     } else {
       // If removing the new file but product has existing image
       if (product?.image_url) {
-        setImagePreview(`${supabase.storageUrl}/object/public/product_images/${product.image_url}`);
+        setImagePreview(supabase.storage.from('product_images').getPublicUrl(product.image_url).data.publicUrl);
       } else {
         setImagePreview(null);
       }

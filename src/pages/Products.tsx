@@ -146,7 +146,7 @@ const Products: React.FC = () => {
                 name: product.name,
                 price: product.price,
                 image_url: product.image_url ? 
-                  `${supabase.storageUrl}/object/public/product_images/${product.image_url}` : 
+                  `${supabase.storage.from('product_images').getPublicUrl(product.image_url).data.publicUrl}` : 
                   '/placeholder.svg',
                 description: product.description || undefined,
                 category_id: product.category_id,

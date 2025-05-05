@@ -115,7 +115,7 @@ const ProductsList: React.FC<ProductsListProps> = ({
               <TableCell>
                 {product.image_url ? (
                   <img 
-                    src={`${supabase.storageUrl}/object/public/product_images/${product.image_url}`} 
+                    src={supabase.storage.from('product_images').getPublicUrl(product.image_url).data.publicUrl} 
                     alt={product.name} 
                     className="w-12 h-12 object-cover rounded"
                   />

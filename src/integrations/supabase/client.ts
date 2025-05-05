@@ -6,11 +6,8 @@ import type { Database } from './types';
 const SUPABASE_URL = "https://dblcekrtlwawhoirovzt.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRibGNla3J0bHdhd2hvaXJvdnp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0NDQ2OTUsImV4cCI6MjA2MjAyMDY5NX0.BYcYNV4_wlRkB5QqJoSr6rcbevA12tmqCUU09df2ICg";
 
-// Create the Supabase client with the correct types
+// Create the Supabase client
 const supabaseClient = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-// Export the client with the storageUrl property for convenience
-export const supabase = {
-  ...supabaseClient,
-  storageUrl: `${SUPABASE_URL}/storage/v1`,
-};
+// Export the unmodified client to access all methods properly
+export const supabase = supabaseClient;
