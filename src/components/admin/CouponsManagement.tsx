@@ -5,7 +5,7 @@ import { format, parseISO } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/components/ui/sonner';
 import { 
   Dialog, DialogContent, DialogHeader, 
   DialogTitle, DialogFooter 
@@ -130,19 +130,12 @@ const CouponsManagement: React.FC = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['coupons'] });
-      toast({
-        title: "Success",
-        description: `Coupon ${editingCoupon ? 'updated' : 'added'} successfully`,
-      });
+      toast.success(`Coupon ${editingCoupon ? 'updated' : 'added'} successfully`);
       handleCloseForm();
     },
     onError: (error) => {
       console.error('Error saving coupon:', error);
-      toast({
-        title: "Error",
-        description: `Failed to ${editingCoupon ? 'update' : 'add'} coupon. Please try again.`,
-        variant: "destructive"
-      });
+      toast.error(`Failed to ${editingCoupon ? 'update' : 'add'} coupon. Please try again.`);
     }
   });
 
@@ -159,18 +152,11 @@ const CouponsManagement: React.FC = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['coupons'] });
-      toast({
-        title: "Success",
-        description: "Coupon deleted successfully",
-      });
+      toast.success("Coupon deleted successfully");
     },
     onError: (error) => {
       console.error('Error deleting coupon:', error);
-      toast({
-        title: "Error",
-        description: "Failed to delete coupon. Please try again.",
-        variant: "destructive"
-      });
+      toast.error("Failed to delete coupon. Please try again.");
     }
   });
 

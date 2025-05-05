@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { CouponFromSupabase } from '@/types/supabase';
 
 interface CouponFormProps {
   onApplyCoupon: (discountAmount: number, isPercentage: boolean, couponCode: string) => void;
@@ -48,7 +49,7 @@ const CouponForm: React.FC<CouponFormProps> = ({
         throw new Error('Coupon usage limit has been reached.');
       }
       
-      return data;
+      return data as CouponFromSupabase;
     },
     onSuccess: (data) => {
       // Show success message
@@ -83,7 +84,7 @@ const CouponForm: React.FC<CouponFormProps> = ({
         await supabase
           .from('coupons')
           .update({ 
-            usage_count: currentData.usage_count + 1,
+            usage_count: (currentData.usage_count as number) + 1,
             updated_at: new Date().toISOString() 
           })
           .eq('id', couponId);
