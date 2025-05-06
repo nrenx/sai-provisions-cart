@@ -9,14 +9,19 @@ interface AdminGuardProps {
 }
 
 const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
-  const { isAdmin, isLoading } = useAdminAuth();
+  const { isAdmin, isLoading, error } = useAdminAuth();
   const location = useLocation();
 
   React.useEffect(() => {
-    if (!isLoading && !isAdmin) {
-      toast.error("You must be logged in as an admin to access this page");
+    if (!isLoading) {
+      if (!isAdmin) {
+        toast.error("You must be logged in as an admin to access this page");
+      }
+      if (error) {
+        toast.error(error);
+      }
     }
-  }, [isAdmin, isLoading]);
+  }, [isAdmin, isLoading, error]);
 
   if (isLoading) {
     return (
@@ -27,7 +32,7 @@ const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
   }
 
   if (!isAdmin) {
-    // Save the intended destination
+    // Save the intended destination for redirect after login
     return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
   }
 

@@ -12,11 +12,13 @@ export const useAdminAuth = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [adminData, setAdminData] = useState<Omit<AdminSession, 'expiresAt'> | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAdminAuth = () => {
       try {
         setIsLoading(true);
+        setError(null);
         const storedSession = localStorage.getItem('adminSession');
         
         if (!storedSession) {
@@ -50,11 +52,13 @@ export const useAdminAuth = () => {
           localStorage.removeItem('adminSession');
           setIsAdmin(false);
           setAdminData(null);
+          setError('Session data is invalid');
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error checking admin auth:', error);
         setIsAdmin(false);
         setAdminData(null);
+        setError(error.message || 'Authentication error');
       } finally {
         setIsLoading(false);
       }
@@ -74,10 +78,11 @@ export const useAdminAuth = () => {
       localStorage.removeItem('adminSession');
       setIsAdmin(false);
       setAdminData(null);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error during logout:', error);
+      setError(error.message || 'Logout error');
     }
   };
 
-  return { isAdmin, isLoading, adminData, logout };
+  return { isAdmin, isLoading, adminData, logout, error };
 };
