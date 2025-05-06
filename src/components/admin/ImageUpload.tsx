@@ -1,5 +1,5 @@
 
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
 import { Loader2, Upload, X, Camera, Image } from 'lucide-react';
@@ -68,6 +68,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setShowCamera(false);
   };
 
+  // Cleanup camera stream when component unmounts
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
   // Capture photo
   const capturePhoto = () => {
     if (videoRef.current && streamRef.current) {
@@ -101,7 +110,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             <video 
               ref={videoRef} 
               autoPlay 
-              playsInline 
+              playsInline
+              muted
               className="w-full rounded-md border"
             />
             <div className="flex justify-center mt-2 gap-2">

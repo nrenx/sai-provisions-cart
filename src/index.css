@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 142 76% 36%;
+    --primary: 262 83% 58%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 142 76% 36%;
@@ -58,15 +58,15 @@
   }
   
   .btn-primary {
-    @apply bg-green-500 hover:bg-green-600 text-white;
+    @apply bg-[#0C831F] hover:bg-[#0A7119] text-white;
   }
   
   .btn-secondary {
-    @apply bg-orange-500 hover:bg-orange-600 text-white;
+    @apply bg-[#F7BC00] hover:bg-[#F59E0B] text-white;
   }
   
   .btn-outline {
-    @apply border border-green-500 text-green-500 hover:bg-green-500 hover:text-white;
+    @apply border border-[#0C831F] text-[#0C831F] hover:bg-[#0C831F] hover:text-white;
   }
   
   .btn-lg {

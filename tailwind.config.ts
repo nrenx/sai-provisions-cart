@@ -63,16 +63,16 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom colors for Vijaya Sai Provisions
+				// Custom colors for Vijaya Sai Provisions (Blinkit-inspired)
 				"brand": {
-					"primary": "#9b87f5",
-					"secondary": "#7E69AB",
-					"dark": "#1A1F2C",
-					"accent": "#8B5CF6",
+					"primary": "#0C831F", // Blinkit green
+					"secondary": "#F7BC00", // Blinkit yellow
+					"dark": "#2D3748",
+					"accent": "#F59E0B",
 					"orange": "#F97316",
 					"light": "#F1F1F1",
-					"soft-purple": "#E5DEFF",
-					"soft-pink": "#FFDEE2"
+					"soft-yellow": "#FEF3C7",
+					"soft-green": "#DCFCE7"
 				}
 			},
 			borderRadius: {

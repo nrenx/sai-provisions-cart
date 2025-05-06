@@ -17,9 +17,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Loader2, Plus, Trash2 } from 'lucide-react';
+import { Loader2, Plus, Trash2, Pencil } from 'lucide-react';
 import { CategoryFromSupabase } from '@/types/supabase';
 import ImageUpload from './ImageUpload';
+import CategoryEditDialog from './CategoryEditDialog';
 
 // Category form schema
 const categorySchema = z.object({
@@ -33,6 +34,8 @@ const CategoriesManagement: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [categoryToEdit, setCategoryToEdit] = useState<CategoryFromSupabase | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
   const queryClient = useQueryClient();
   
@@ -187,6 +190,11 @@ const CategoriesManagement: React.FC = () => {
     }
   };
 
+  const handleEdit = (category: CategoryFromSupabase) => {
+    setCategoryToEdit(category);
+    setIsEditDialogOpen(true);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -238,7 +246,14 @@ const CategoriesManagement: React.FC = () => {
                       View Products
                     </Button>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right flex justify-end gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      onClick={() => handleEdit(category)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
                     <Button 
                       variant="outline" 
                       size="icon" 
@@ -317,6 +332,16 @@ const CategoriesManagement: React.FC = () => {
           </Form>
         </DialogContent>
       </Dialog>
+
+      {/* Edit Category Dialog */}
+      <CategoryEditDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => {
+          setIsEditDialogOpen(false);
+          setCategoryToEdit(null);
+        }}
+        category={categoryToEdit}
+      />
     </div>
   );
 };

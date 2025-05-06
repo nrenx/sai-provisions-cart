@@ -24,7 +24,9 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
       
       <div className="flex-grow ml-4">
         <h3 className="font-medium text-brand-dark">{product.name}</h3>
-        <p className="text-gray-500 text-sm">Category: {product.category_id}</p>
+        <p className="text-gray-500 text-sm">
+          {product.category?.name || "Uncategorized"}
+        </p>
       </div>
       
       <div className="flex-shrink-0 flex items-center ml-4">
