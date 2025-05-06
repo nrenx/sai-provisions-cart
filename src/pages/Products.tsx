@@ -29,22 +29,14 @@ const Products: React.FC = () => {
 
   // Fetch products with their categories from Supabase
   const { data: products, isLoading } = useQuery({
-    queryKey: ['products', activeCategory, searchTerm],
+    queryKey: ['products'],
     queryFn: async () => {
-      let query = supabase
+      const { data, error } = await supabase
         .from('products')
         .select(`
           *,
           category:categories(*)
         `);
-      
-      // Apply category filter if not "All"
-      if (activeCategory !== "All") {
-        // Join with categories to filter by category name
-        query = query.eq('categories.name', activeCategory);
-      }
-      
-      const { data, error } = await query;
       
       if (error) throw error;
       return data as ProductWithCategory[];
@@ -60,18 +52,28 @@ const Products: React.FC = () => {
     }
   }, [searchParams, categories]);
 
-  // Filter products by search term
+  // Filter products by category and search term
   const filteredProducts = products?.filter(product => {
-    if (!searchTerm) return true;
+    // Apply category filter
+    if (activeCategory !== "All") {
+      if (!product.category || product.category.name !== activeCategory) {
+        return false;
+      }
+    }
     
-    const lowercasedTerm = searchTerm.toLowerCase();
-    return (
-      product.name.toLowerCase().includes(lowercasedTerm) ||
-      (product.category?.name && 
-        product.category.name.toLowerCase().includes(lowercasedTerm)) ||
-      (product.description && 
-        product.description.toLowerCase().includes(lowercasedTerm))
-    );
+    // Apply search filter if searchTerm exists
+    if (searchTerm) {
+      const lowercasedTerm = searchTerm.toLowerCase();
+      return (
+        product.name.toLowerCase().includes(lowercasedTerm) ||
+        (product.category?.name && 
+          product.category.name.toLowerCase().includes(lowercasedTerm)) ||
+        (product.description && 
+          product.description.toLowerCase().includes(lowercasedTerm))
+      );
+    }
+    
+    return true;
   });
 
   const handleCategoryChange = (category: string) => {
@@ -86,7 +88,7 @@ const Products: React.FC = () => {
 
   return (
     <div className="container py-8">
-      <h1 className="text-3xl md:text-4xl font-bold mb-6">Our Products</h1>
+      <h1 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">Our Products</h1>
       
       {/* Search and Filter */}
       <div className="mb-8">
@@ -98,7 +100,7 @@ const Products: React.FC = () => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
         </div>
@@ -109,7 +111,7 @@ const Products: React.FC = () => {
             onClick={() => handleCategoryChange("All")}
             className={`px-4 py-2 rounded-full text-sm ${
               activeCategory === "All"
-                ? 'bg-brand-primary text-white'
+                ? 'bg-green-500 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
@@ -121,7 +123,7 @@ const Products: React.FC = () => {
               onClick={() => handleCategoryChange(category)}
               className={`px-4 py-2 rounded-full text-sm ${
                 activeCategory === category
-                  ? 'bg-brand-primary text-white'
+                  ? 'bg-green-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >

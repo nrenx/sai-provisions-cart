@@ -4,17 +4,33 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductsManagement from '@/components/admin/ProductsManagement';
 import CategoriesManagement from '@/components/admin/CategoriesManagement';
 import CouponsManagement from '@/components/admin/CouponsManagement';
+import AdminHeader from '@/components/admin/AdminHeader';
 
 const Admin: React.FC = () => {
   return (
     <div className="container py-8">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+      <AdminHeader />
       
       <Tabs defaultValue="products" className="w-full">
-        <TabsList className="mb-6">
-          <TabsTrigger value="products">Products</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
-          <TabsTrigger value="coupons">Coupons</TabsTrigger>
+        <TabsList className="mb-6 bg-gray-100">
+          <TabsTrigger 
+            value="products"
+            className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+          >
+            Products
+          </TabsTrigger>
+          <TabsTrigger 
+            value="categories"
+            className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+          >
+            Categories
+          </TabsTrigger>
+          <TabsTrigger 
+            value="coupons"
+            className="data-[state=active]:bg-green-500 data-[state=active]:text-white"
+          >
+            Coupons
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="products">

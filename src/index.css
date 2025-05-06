@@ -14,16 +14,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 258 76% 74%;
+    --primary: 142 76% 36%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 260 24% 54%;
+    --secondary: 142 76% 36%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 262 86% 66%;
+    --accent: 142 76% 36%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -31,7 +31,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 262 86% 66%;
+    --ring: 142 76% 36%;
 
     --radius: 0.5rem;
   }
@@ -58,15 +58,15 @@
   }
   
   .btn-primary {
-    @apply bg-brand-accent hover:bg-brand-accent/90 text-white;
+    @apply bg-green-500 hover:bg-green-600 text-white;
   }
   
   .btn-secondary {
-    @apply bg-brand-orange hover:bg-brand-orange/90 text-white;
+    @apply bg-orange-500 hover:bg-orange-600 text-white;
   }
   
   .btn-outline {
-    @apply border border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white;
+    @apply border border-green-500 text-green-500 hover:bg-green-500 hover:text-white;
   }
   
   .btn-lg {
