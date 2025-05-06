@@ -1,3 +1,4 @@
+
 name: Deploy to GitHub Pages
 
 on:
@@ -34,6 +35,8 @@ jobs:
       
       - name: Build
         run: npm run build
+        env:
+          BASE_URL: /sai-provisions-cart/
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
