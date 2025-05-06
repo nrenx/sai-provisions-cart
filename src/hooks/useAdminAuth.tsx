@@ -21,30 +21,40 @@ export const useAdminAuth = () => {
         
         if (!storedSession) {
           setIsAdmin(false);
+          setAdminData(null);
           return;
         }
 
-        const session: AdminSession = JSON.parse(storedSession);
-        const now = new Date().getTime();
-        
-        // Check if session is expired
-        if (now > session.expiresAt) {
-          // Session expired, clear it
+        try {
+          const session: AdminSession = JSON.parse(storedSession);
+          const now = new Date().getTime();
+          
+          // Check if session is expired
+          if (now > session.expiresAt) {
+            // Session expired, clear it
+            localStorage.removeItem('adminSession');
+            setIsAdmin(false);
+            setAdminData(null);
+            return;
+          }
+
+          // Valid session
+          setIsAdmin(true);
+          setAdminData({
+            id: session.id,
+            email: session.email,
+            name: session.name
+          });
+        } catch (parseError) {
+          console.error('Error parsing admin session:', parseError);
           localStorage.removeItem('adminSession');
           setIsAdmin(false);
-          return;
+          setAdminData(null);
         }
-
-        // Valid session
-        setIsAdmin(true);
-        setAdminData({
-          id: session.id,
-          email: session.email,
-          name: session.name
-        });
       } catch (error) {
         console.error('Error checking admin auth:', error);
         setIsAdmin(false);
+        setAdminData(null);
       } finally {
         setIsLoading(false);
       }
@@ -60,9 +70,13 @@ export const useAdminAuth = () => {
   }, []);
 
   const logout = () => {
-    localStorage.removeItem('adminSession');
-    setIsAdmin(false);
-    setAdminData(null);
+    try {
+      localStorage.removeItem('adminSession');
+      setIsAdmin(false);
+      setAdminData(null);
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   return { isAdmin, isLoading, adminData, logout };

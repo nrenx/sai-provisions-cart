@@ -5,8 +5,16 @@ import ProductsManagement from '@/components/admin/ProductsManagement';
 import CategoriesManagement from '@/components/admin/CategoriesManagement';
 import CouponsManagement from '@/components/admin/CouponsManagement';
 import AdminHeader from '@/components/admin/AdminHeader';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 
 const Admin: React.FC = () => {
+  const { isAdmin } = useAdminAuth();
+  
+  // This is a second safety check in addition to AdminGuard
+  if (!isAdmin) {
+    return null; // AdminGuard will handle the redirect
+  }
+
   return (
     <div className="container py-8">
       <AdminHeader />

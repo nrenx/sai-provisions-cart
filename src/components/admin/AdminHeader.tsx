@@ -4,14 +4,21 @@ import { Button } from '@/components/ui/button';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, User } from 'lucide-react';
+import { toast } from '@/components/ui/sonner';
 
 const AdminHeader: React.FC = () => {
   const { adminData, logout } = useAdminAuth();
   const navigate = useNavigate();
   
   const handleLogout = () => {
-    logout();
-    navigate('/admin/login');
+    try {
+      logout();
+      toast.success("Logged out successfully");
+      navigate('/admin/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error("Failed to log out. Please try again.");
+    }
   };
 
   return (
@@ -23,7 +30,7 @@ const AdminHeader: React.FC = () => {
       <div className="flex items-center gap-4">
         <div className="flex items-center text-sm text-gray-600">
           <User className="mr-2 h-4 w-4" />
-          <span>{adminData?.email}</span>
+          <span>{adminData?.email || 'Admin'}</span>
         </div>
         
         <Button 

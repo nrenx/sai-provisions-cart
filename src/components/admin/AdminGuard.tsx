@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { toast } from '@/components/ui/sonner';
 
 interface AdminGuardProps {
   children: React.ReactNode;
@@ -9,6 +10,13 @@ interface AdminGuardProps {
 
 const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
   const { isAdmin, isLoading } = useAdminAuth();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (!isLoading && !isAdmin) {
+      toast.error("You must be logged in as an admin to access this page");
+    }
+  }, [isAdmin, isLoading]);
 
   if (isLoading) {
     return (
@@ -19,7 +27,8 @@ const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
   }
 
   if (!isAdmin) {
-    return <Navigate to="/admin/login" replace />;
+    // Save the intended destination
+    return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
   }
 
   return <>{children}</>;
