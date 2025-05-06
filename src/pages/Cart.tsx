@@ -50,9 +50,9 @@ const Cart: React.FC = () => {
   // Calculate the discount amount
   const calculateDiscountAmount = (): number => {
     if (!appliedCoupon) return 0;
-    
+
     const subtotal = getCartTotal();
-    
+
     if (appliedCoupon.isPercentage) {
       return (subtotal * appliedCoupon.discountAmount) / 100;
     } else {
@@ -81,42 +81,44 @@ const Cart: React.FC = () => {
   }
 
   return (
-    <div className="container py-8">
-      <h1 className="text-3xl md:text-4xl font-bold mb-6">Your Cart</h1>
+    <div className="container py-6 md:py-8">
+      <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">Your Cart</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-md p-6 divide-y">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+        {/* Cart Items - Full width on mobile, 2/3 on desktop */}
+        <div className="lg:col-span-2 order-2 lg:order-1">
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 divide-y">
             {cartItems.map((item) => (
               <CartItem key={item.product.id} item={item} />
             ))}
           </div>
         </div>
 
-        <div className="lg:col-span-1">
-          <div className="bg-gradient-to-br from-brand-soft-purple to-white rounded-lg shadow-md p-6 sticky top-24">
+        {/* Order Summary - Full width on mobile, 1/3 on desktop */}
+        <div className="lg:col-span-1 order-1 lg:order-2 mb-4 lg:mb-0">
+          <div className="bg-gradient-to-br from-brand-soft-purple to-white rounded-lg shadow-md p-4 md:p-6 sticky top-20">
             <h2 className="text-xl font-bold mb-4 text-brand-dark">Order Summary</h2>
-            
+
             {/* Coupon Section */}
-            <CouponForm 
-              onApplyCoupon={handleApplyCoupon} 
-              onRemoveCoupon={handleRemoveCoupon} 
+            <CouponForm
+              onApplyCoupon={handleApplyCoupon}
+              onRemoveCoupon={handleRemoveCoupon}
               appliedCoupon={appliedCoupon}
             />
-            
+
             <div className="space-y-3 mb-6">
               <div className="flex justify-between">
                 <span className="text-gray-600">Items ({cartItems.length}):</span>
                 <span>₹{getCartTotal().toFixed(2)}</span>
               </div>
-              
+
               {appliedCoupon && (
                 <div className="flex justify-between text-green-600">
                   <span>Discount ({appliedCoupon.code}):</span>
                   <span>-₹{calculateDiscountAmount().toFixed(2)}</span>
                 </div>
               )}
-              
+
               <div className="flex justify-between">
                 <span className="text-gray-600">Delivery:</span>
                 <span className="text-green-600">Free</span>
@@ -126,7 +128,7 @@ const Cart: React.FC = () => {
                 <span className="text-xl text-brand-primary">₹{calculateFinalTotal().toFixed(2)}</span>
               </div>
             </div>
-            
+
             {showForm ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -142,7 +144,7 @@ const Cart: React.FC = () => {
                     placeholder="Enter your full name"
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                   <input
@@ -156,7 +158,7 @@ const Cart: React.FC = () => {
                     placeholder="Enter your phone number"
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Delivery Address</label>
                   <textarea
@@ -170,17 +172,17 @@ const Cart: React.FC = () => {
                     placeholder="Enter your delivery address"
                   ></textarea>
                 </div>
-                
-                <button 
-                  type="submit" 
+
+                <button
+                  type="submit"
                   className="w-full btn btn-primary btn-lg"
                 >
                   Send Order via WhatsApp
                 </button>
               </form>
             ) : (
-              <button 
-                onClick={() => setShowForm(true)} 
+              <button
+                onClick={() => setShowForm(true)}
                 className="w-full btn btn-primary btn-lg"
               >
                 Proceed to Buy
